@@ -17,10 +17,10 @@ android {
         }
     }
 
-    sourceSets{
+    sourceSets {
         def mainSrc = "src/main/"
-        main{
-            res.srcDirs = ["${mainSrc}res","${mainSrc}res_appcompat"]
+        main {
+            res.srcDirs = ["${mainSrc}res", "${mainSrc}res_appcompat"]
         }
     }
 
