@@ -2,3 +2,5 @@
 gradle-wrapper.jar
 build
 local.properties
+.gradle
+temp

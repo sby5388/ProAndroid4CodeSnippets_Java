@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">指南针-demo</string>
+    <string name="app_name_copy">指南针-demo-copy</string>
+    <string name="cardinal_north">北</string>
+    <string name="cardinal_east">东</string>
+    <string name="cardinal_south">南</string>
+    <string name="cardinal_west">西</string>
+</resources>
