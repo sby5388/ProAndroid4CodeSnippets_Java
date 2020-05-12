@@ -33,44 +33,38 @@ import java.util.List;
 
 public class EarthquakeListFragment extends Fragment {
 
-  private ArrayList<Earthquake> mEarthquakes =
-    new ArrayList<Earthquake>();
+    private final ArrayList<Earthquake> mEarthquakes =
+            new ArrayList<>();
 
-  private EarthquakeRecyclerViewAdapter mEarthquakeAdapter =
-    new EarthquakeRecyclerViewAdapter(mEarthquakes);
+    private final EarthquakeRecyclerViewAdapter mEarthquakeAdapter =
+            new EarthquakeRecyclerViewAdapter(mEarthquakes);
 
-  private RecyclerView mRecyclerView;
-
-  public EarthquakeListFragment() {
-  }
-
-  @Override
-  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_earthquake_list,
-      container, false);
-    mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
-
-    return view;
-  }
-
-  @Override
-  public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-
-    // Set the Recycler View adapter
-    Context context = view.getContext();
-    mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-    mRecyclerView.setAdapter(mEarthquakeAdapter);
-  }
-
-  public void setEarthquakes(List<Earthquake> earthquakes) {
-    for (Earthquake earthquake: earthquakes) {
-      if (!mEarthquakes.contains(earthquake)) {
-        mEarthquakes.add(earthquake);
-        mEarthquakeAdapter
-          .notifyItemInserted(mEarthquakes.indexOf(earthquake));
-      }
+    public EarthquakeListFragment() {
     }
-  }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_earthquake_list, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        RecyclerView recyclerView = view.findViewById(R.id.list);
+        // Set the Recycler View adapter
+        Context context = view.getContext();
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(mEarthquakeAdapter);
+    }
+
+    public void setEarthquakes(List<Earthquake> earthquakes) {
+        for (Earthquake earthquake : earthquakes) {
+            if (!mEarthquakes.contains(earthquake)) {
+                mEarthquakes.add(earthquake);
+                // TODO: 2020/5/12 适配器更新指定的某一个
+                mEarthquakeAdapter.notifyItemInserted(mEarthquakes.indexOf(earthquake));
+            }
+        }
+    }
 }
