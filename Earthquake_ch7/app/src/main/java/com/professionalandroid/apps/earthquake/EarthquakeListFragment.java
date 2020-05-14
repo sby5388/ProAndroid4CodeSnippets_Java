@@ -37,103 +37,101 @@ import java.util.List;
 
 public class EarthquakeListFragment extends Fragment {
 
-  public interface OnListFragmentInteractionListener {
-    void onListFragmentRefreshRequested();
-  }
-  private OnListFragmentInteractionListener mListener;
+    protected EarthquakeViewModel earthquakeViewModel;
+    private OnListFragmentInteractionListener mListener;
 
-  private ArrayList<Earthquake> mEarthquakes =
-    new ArrayList<Earthquake>();
+    private ArrayList<Earthquake> mEarthquakes =
+            new ArrayList<Earthquake>();
 
-  private EarthquakeRecyclerViewAdapter mEarthquakeAdapter =
-    new EarthquakeRecyclerViewAdapter(mEarthquakes);
+    private EarthquakeRecyclerViewAdapter mEarthquakeAdapter =
+            new EarthquakeRecyclerViewAdapter(mEarthquakes);
 
-  private RecyclerView mRecyclerView;
-  private SwipeRefreshLayout mSwipeToRefreshView;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeToRefreshView;
 
-  protected EarthquakeViewModel earthquakeViewModel;
-
-  public EarthquakeListFragment() {
-  }
-
-  @Override
-  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_earthquake_list,
-      container, false);
-    mRecyclerView = view.findViewById(R.id.list);
-    mSwipeToRefreshView = view.findViewById(R.id.swiperefresh);
-
-    return view;
-  }
-
-  @Override
-  public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-
-    // Set the Recycler View adapter
-    Context context = view.getContext();
-    mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-    mRecyclerView.setAdapter(mEarthquakeAdapter);
-
-    // Setup the Swipe to Refresh view
-    mSwipeToRefreshView.setOnRefreshListener(
-      new SwipeRefreshLayout.OnRefreshListener() {
-        @Override
-        public void onRefresh() {
-          updateEarthquakes();
-        }
-      });
-  }
-
-  protected void updateEarthquakes() {
-    if (mListener != null)
-      mListener.onListFragmentRefreshRequested();
-  }
-
-  public void setEarthquakes(List<Earthquake> earthquakes) {
-    mEarthquakes.clear();
-    mEarthquakeAdapter.notifyDataSetChanged();
-
-    for (Earthquake earthquake: earthquakes) {
-      if (!mEarthquakes.contains(earthquake)) {
-        mEarthquakes.add(earthquake);
-        mEarthquakeAdapter
-          .notifyItemInserted(mEarthquakes.indexOf(earthquake));
-      }
+    public EarthquakeListFragment() {
     }
 
-    mSwipeToRefreshView.setRefreshing(false);
-  }
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_earthquake_list,
+                container, false);
+    }
 
-  @Override
-  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mRecyclerView = view.findViewById(R.id.list);
+        mSwipeToRefreshView = view.findViewById(R.id.swiperefresh);
+        // Set the Recycler View adapter
+        Context context = view.getContext();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mRecyclerView.setAdapter(mEarthquakeAdapter);
 
-    // Retrieve the Earthquake View Model for the parent Activity.
-    earthquakeViewModel = ViewModelProviders.of(getActivity())
-                            .get(EarthquakeViewModel.class);
+        // Setup the Swipe to Refresh view
+        mSwipeToRefreshView.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        updateEarthquakes();
+                    }
+                });
+    }
 
-    // Get the data from the View Model, and observe any changes.
-    earthquakeViewModel.getEarthquakes()
-      .observe(this, new Observer<List<Earthquake>>() {
-        @Override
-        public void onChanged(@Nullable List<Earthquake> earthquakes) {
-          // When the View Model changes, update the List
-          if (earthquakes != null)
-            setEarthquakes(earthquakes);
+    protected void updateEarthquakes() {
+        if (mListener != null)
+            mListener.onListFragmentRefreshRequested();
+    }
+
+    public void setEarthquakes(List<Earthquake> earthquakes) {
+        mEarthquakes.clear();
+        mEarthquakeAdapter.notifyDataSetChanged();
+
+        for (Earthquake earthquake : earthquakes) {
+            if (!mEarthquakes.contains(earthquake)) {
+                mEarthquakes.add(earthquake);
+                mEarthquakeAdapter
+                        .notifyItemInserted(mEarthquakes.indexOf(earthquake));
+            }
         }
-      });
-  }
 
-  @Override
-  public void onAttach(Context context) {
-    super.onAttach(context);
-    mListener = (OnListFragmentInteractionListener) context;
-  }
-  @Override
-  public void onDetach() {
-    super.onDetach();
-    mListener = null;
-  }
+        mSwipeToRefreshView.setRefreshing(false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // Retrieve the Earthquake View Model for the parent Activity.
+        earthquakeViewModel = ViewModelProviders.of(getActivity())
+                .get(EarthquakeViewModel.class);
+
+        // Get the data from the View Model, and observe any changes.
+        earthquakeViewModel.getEarthquakes()
+                .observe(this, new Observer<List<Earthquake>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Earthquake> earthquakes) {
+                        // When the View Model changes, update the List
+                        if (earthquakes != null)
+                            setEarthquakes(earthquakes);
+                    }
+                });
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mListener = (OnListFragmentInteractionListener) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnListFragmentInteractionListener {
+        void onListFragmentRefreshRequested();
+    }
 }
