@@ -70,8 +70,8 @@ public class MyActivity extends AppCompatActivity {
     /*
      * Listing 6-17: Registering and unregistering a Broadcast Receiver in code
      */
-    private IntentFilter filter = new IntentFilter(LifeformDetectedReceiver.NEW_LIFEFORM_ACTION);
-    private LifeformDetectedReceiver receiver = new LifeformDetectedReceiver();
+    private IntentFilter filter = new IntentFilter(LifeFormDetectedReceiver.NEW_LIFEFORM_ACTION);
+    private LifeFormDetectedReceiver receiver = new LifeFormDetectedReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,9 +127,7 @@ public class MyActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onActivityResult(int requestCode,
-                                 int resultCode,
-                                 Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case (SELECT_HORSE):
@@ -159,8 +157,7 @@ public class MyActivity extends AppCompatActivity {
         int flags = PackageManager.MATCH_ALL;
 
         // Generate the list
-        List<ResolveInfo> actions;
-        actions = packageManager.queryIntentActivities(intent, flags);
+        List<ResolveInfo> actions = packageManager.queryIntentActivities(intent, flags);
 
         // Extract the list of action names
         ArrayList<CharSequence> labels = new ArrayList<CharSequence>();
@@ -240,16 +237,16 @@ public class MyActivity extends AppCompatActivity {
 
     private void listing6_15() {
         // Listing 6-15: Broadcasting an Intent
-        Intent explicitIntent = new Intent(this, LifeformDetectedReceiver.class);
-        explicitIntent.putExtra(LifeformDetectedReceiver.EXTRA_LIFEFORM_NAME, detectedLifeform);
-        explicitIntent.putExtra(LifeformDetectedReceiver.EXTRA_LATITUDE, mLatitude);
-        explicitIntent.putExtra(LifeformDetectedReceiver.EXTRA_LONGITUDE, mLongitude);
+        Intent explicitIntent = new Intent(this, LifeFormDetectedReceiver.class);
+        explicitIntent.putExtra(LifeFormDetectedReceiver.EXTRA_LIFEFORM_NAME, detectedLifeform);
+        explicitIntent.putExtra(LifeFormDetectedReceiver.EXTRA_LATITUDE, mLatitude);
+        explicitIntent.putExtra(LifeFormDetectedReceiver.EXTRA_LONGITUDE, mLongitude);
         sendBroadcast(explicitIntent);
 
-        Intent intent = new Intent(LifeformDetectedReceiver.NEW_LIFEFORM_ACTION);
-        intent.putExtra(LifeformDetectedReceiver.EXTRA_LIFEFORM_NAME, detectedLifeform);
-        intent.putExtra(LifeformDetectedReceiver.EXTRA_LATITUDE, mLatitude);
-        intent.putExtra(LifeformDetectedReceiver.EXTRA_LONGITUDE, mLongitude);
+        Intent intent = new Intent(LifeFormDetectedReceiver.NEW_LIFEFORM_ACTION);
+        intent.putExtra(LifeFormDetectedReceiver.EXTRA_LIFEFORM_NAME, detectedLifeform);
+        intent.putExtra(LifeFormDetectedReceiver.EXTRA_LATITUDE, mLatitude);
+        intent.putExtra(LifeFormDetectedReceiver.EXTRA_LONGITUDE, mLongitude);
         sendBroadcast(intent);
     }
 
@@ -292,7 +289,7 @@ public class MyActivity extends AppCompatActivity {
 
     private void listing6_18() {
         //Listing 6-18: Dynamically toggling manifest Receivers
-        ComponentName myReceiverName = new ComponentName(this, LifeformDetectedReceiver.class);
+        ComponentName myReceiverName = new ComponentName(this, LifeFormDetectedReceiver.class);
         PackageManager pm = getPackageManager();
 
         // Enable a manifest receiver

@@ -27,7 +27,7 @@ import android.support.v4.app.NotificationManagerCompat;
 /*
  * Listing 6-16: Implementing a Broadcast Receiver
  */
-public class LifeformDetectedReceiver extends BroadcastReceiver {
+public class LifeFormDetectedReceiver extends BroadcastReceiver {
     public static final String NEW_LIFEFORM_ACTION
             = "com.professionalandroid.alien.action.NEW_LIFEFORM_ACTION";
     public static final String EXTRA_LIFEFORM_NAME
