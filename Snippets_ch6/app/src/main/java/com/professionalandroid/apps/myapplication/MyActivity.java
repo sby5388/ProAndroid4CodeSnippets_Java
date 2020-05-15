@@ -108,8 +108,9 @@ public class MyActivity extends AppCompatActivity {
                 // typically by disabling the UI element that would allow
                 // users to attempt this action.
                 Log.e(TAG, "Intent could not resolve to an Activity.");
-            } else
+            } else {
                 startActivity(intent);
+            }
         }
     }
 
@@ -130,13 +131,15 @@ public class MyActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case (SELECT_HORSE):
-                if (resultCode == Activity.RESULT_OK)
+            case SELECT_HORSE:
+                if (resultCode == Activity.RESULT_OK) {
                     selectedHorse = data.getData();
+                }
                 break;
-            case (SELECT_GUN):
-                if (resultCode == Activity.RESULT_OK)
+            case SELECT_GUN:
+                if (resultCode == Activity.RESULT_OK) {
                     selectedGun = data.getData();
+                }
                 break;
             default:
                 break;
@@ -160,10 +163,11 @@ public class MyActivity extends AppCompatActivity {
         List<ResolveInfo> actions = packageManager.queryIntentActivities(intent, flags);
 
         // Extract the list of action names
-        ArrayList<CharSequence> labels = new ArrayList<CharSequence>();
+        final ArrayList<CharSequence> labels = new ArrayList<>();
         Resources r = getResources();
-        for (ResolveInfo action : actions)
-            labels.add(action.nonLocalizedLabel);
+        for (ResolveInfo resolveInfo : actions) {
+            labels.add(resolveInfo.nonLocalizedLabel);
+        }
     }
 
     /*

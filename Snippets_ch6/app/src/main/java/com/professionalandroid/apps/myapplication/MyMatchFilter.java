@@ -24,6 +24,7 @@ import android.text.util.Linkify;
  * Listing 6-13: Using a Linkify Match Filter
  */
 class MyMatchFilter implements Linkify.MatchFilter {
+    @Override
     public boolean acceptMatch(CharSequence s, int start, int end) {
         return (start == 0 || s.charAt(start - 1) != '!');
     }

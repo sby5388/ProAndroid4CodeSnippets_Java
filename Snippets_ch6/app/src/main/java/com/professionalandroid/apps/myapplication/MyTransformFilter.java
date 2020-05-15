@@ -26,6 +26,7 @@ import java.util.regex.Matcher;
  * Listing 6-14: Using a Linkify Transform Filter
  */
 class MyTransformFilter implements Linkify.TransformFilter {
+    @Override
     public String transformUrl(Matcher match, String url) {
         return url.toLowerCase().replace(" ", "");
     }

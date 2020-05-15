@@ -46,12 +46,12 @@ public class LifeFormDetectedReceiver extends BroadcastReceiver {
         double lat = intent.getDoubleExtra(EXTRA_LATITUDE, Double.NaN);
         double lng = intent.getDoubleExtra(EXTRA_LONGITUDE, Double.NaN);
 
-        if (type.equals(FACE_HUGGER)) {
+        if (FACE_HUGGER.equals(type)) {
             NotificationManagerCompat notificationManager =
                     NotificationManagerCompat.from(context);
 
             NotificationCompat.Builder builder =
-                    new NotificationCompat.Builder(context);
+                    new NotificationCompat.Builder(context, BuildConfig.APPLICATION_ID);
 
             builder.setSmallIcon(R.drawable.ic_alien)
                     .setContentTitle("Face Hugger Detected")
