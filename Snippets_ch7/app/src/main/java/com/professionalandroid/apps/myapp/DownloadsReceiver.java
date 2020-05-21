@@ -16,45 +16,44 @@ import android.net.Uri;
  */
 public class DownloadsReceiver extends BroadcastReceiver {
 
-  public long myDownloadReference;
+    public long myDownloadReference;
 
-  @Override
-  public void onReceive(Context context, Intent intent) {
-    DownloadManager downloadManager =
-      (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        DownloadManager downloadManager =
+                (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
 
-    String extraNotificationFileIds = DownloadManager.EXTRA_NOTIFICATION_CLICK_DOWNLOAD_IDS;
-    String extraFileId = DownloadManager.EXTRA_DOWNLOAD_ID;
-    String action = intent.getAction();
+        String extraNotificationFileIds = DownloadManager.EXTRA_NOTIFICATION_CLICK_DOWNLOAD_IDS;
+        String extraFileId = DownloadManager.EXTRA_DOWNLOAD_ID;
+        String action = intent.getAction();
 
-    if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-      long reference = intent.getLongExtra(extraFileId,-1);
-      if (myDownloadReference == reference) {
-        // Listing 7-9
-        DownloadManager.Query myDownloadQuery = new DownloadManager.Query();
-        myDownloadQuery.setFilterById(reference);
+        if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+            long reference = intent.getLongExtra(extraFileId, -1);
+            if (myDownloadReference == reference) {
+                // Listing 7-9
+                DownloadManager.Query myDownloadQuery = new DownloadManager.Query();
+                myDownloadQuery.setFilterById(reference);
 
-        Cursor myDownload = downloadManager.query(myDownloadQuery);
+                Cursor myDownload = downloadManager.query(myDownloadQuery);
 
-        if (myDownload.moveToFirst()) {
-          int fileIdIdx =
-            myDownload.getColumnIndex(DownloadManager.COLUMN_ID);
+                if (myDownload.moveToFirst()) {
+                    int fileIdIdx =
+                            myDownload.getColumnIndex(DownloadManager.COLUMN_ID);
 
-          long fileId = myDownload.getLong(fileIdIdx);
+                    long fileId = myDownload.getLong(fileIdIdx);
 
-          Uri fileUri = downloadManager.getUriForDownloadedFile(fileId);
+                    Uri fileUri = downloadManager.getUriForDownloadedFile(fileId);
 
-          // TODO Do something with downloaded file.
+                    // TODO Do something with downloaded file.
+                }
+                myDownload.close();
+            }
+        } else if (DownloadManager.ACTION_NOTIFICATION_CLICKED.equals(action)) {
+            long[] references = intent.getLongArrayExtra(extraNotificationFileIds);
+            for (long reference : references)
+                if (myDownloadReference == reference) {
+                    // TODO Respond to user selecting your file download notification.
+                }
         }
-        myDownload.close();
-      }
     }
-    else if (DownloadManager.ACTION_NOTIFICATION_CLICKED.equals(action)) {
-      long[] references = intent.getLongArrayExtra(extraNotificationFileIds);
-      for (long reference : references)
-        if (myDownloadReference == reference) {
-          // TODO Respond to user selecting your file download notification.
-        }
-    }
-  }
 }
