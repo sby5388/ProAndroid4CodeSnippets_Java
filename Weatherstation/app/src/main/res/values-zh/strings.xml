@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">气象站</string>
+    <string name="temperature">温度</string>
+    <string name="pressure">气压</string>
+    <string name="humidity">湿度</string>
+    <string name="light">亮度</string>
+    <string name="light_sensor_unavailable">光传感器不可用</string>
+    <string name="barometer_unavailable">气压计不可用</string>
+    <string name="thermometer_unavailable">温度计不可用</string>
+    <string name="humidity_sensor_unavailable">湿度传感器不可用</string>
+</resources>

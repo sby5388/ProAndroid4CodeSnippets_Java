@@ -1,3 +1,11 @@
 <resources>
-  <string name="app_name">Weather Station</string>
+    <string name="app_name">Weather Station</string>
+    <string name="temperature">Temperature</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
+    <string name="light">Light</string>
+    <string name="light_sensor_unavailable">Light Sensor Unavailable</string>
+    <string name="barometer_unavailable">Barometer Unavailable</string>
+    <string name="thermometer_unavailable">Thermometer Unavailable</string>
+    <string name="humidity_sensor_unavailable">Humidity Sensor Unavailable</string>
 </resources>
