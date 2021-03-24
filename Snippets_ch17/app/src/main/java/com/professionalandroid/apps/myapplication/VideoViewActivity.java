@@ -18,14 +18,12 @@
 
 package com.professionalandroid.apps.myapplication;
 
-import android.app.Activity;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -41,53 +39,53 @@ import java.io.File;
  */
 public class VideoViewActivity extends AppCompatActivity {
 
-  private PlayerView playerView;
-  private SimpleExoPlayer player;
+    private PlayerView playerView;
+    private SimpleExoPlayer player;
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.playerview);
-    playerView = findViewById(R.id.player_view);
-  }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.playerview);
+        playerView = findViewById(R.id.player_view);
+    }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-    // Create a new Exo Player
-    player = ExoPlayerFactory.newSimpleInstance(this,
-      new DefaultTrackSelector());
+        // Create a new Exo Player
+        player = ExoPlayerFactory.newSimpleInstance(this,
+                new DefaultTrackSelector());
 
-    // Associate the ExoPlayer with the Player View
-    playerView.setPlayer(player);
+        // Associate the ExoPlayer with the Player View
+        playerView.setPlayer(player);
 
-    // Build a DataSource.Factory capable of
-    // loading http and local content
-    DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
-      this,
-      Util.getUserAgent(this, getString(R.string.app_name)));
+        // Build a DataSource.Factory capable of
+        // loading http and local content
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
+                this,
+                Util.getUserAgent(this, getString(R.string.app_name)));
 
-    // Specify the URI to play
-    File file = new File(Environment.getExternalStorageDirectory(),
-      // TODO Replace with a real file.
-      "test2.mp4");
-    ExtractorMediaSource mediaSource =
-      new ExtractorMediaSource.Factory(dataSourceFactory)
-        .createMediaSource(Uri.fromFile(file));
+        // Specify the URI to play
+        File file = new File(Environment.getExternalStorageDirectory(),
+                // TODO Replace with a real file.
+                "test2.mp4");
+        ExtractorMediaSource mediaSource =
+                new ExtractorMediaSource.Factory(dataSourceFactory)
+                        .createMediaSource(Uri.fromFile(file));
 
-    // Start loading the media source
-    player.prepare(mediaSource);
+        // Start loading the media source
+        player.prepare(mediaSource);
 
-    // Start playback automatically when ready
-    player.setPlayWhenReady(true);
-  }
+        // Start playback automatically when ready
+        player.setPlayWhenReady(true);
+    }
 
-  @Override
-  protected void onStop() {
-    playerView.setPlayer(null);
-    player.release();
-    player = null;
-    super.onStop();
-  }
+    @Override
+    protected void onStop() {
+        playerView.setPlayer(null);
+        player.release();
+        player = null;
+        super.onStop();
+    }
 }

@@ -49,7 +49,7 @@ public class MyActivity extends AppCompatActivity {
     /*
      * Listing 6-3: Explicitly starting a sub-Activity for a result
      */
-    private static final int SHOW_SUBACTIVITY = 1;
+    private static final int SHOW_SUB_ACTIVITY = 1;
     /*
      * Listing 6-4: Implicitly starting a sub-Activity for a result
      */
@@ -84,6 +84,8 @@ public class MyActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String action = intent.getAction();
         Uri data = intent.getData();
+        Log.d(TAG, "onCreate: action = " + action);
+        Log.d(TAG, "onCreate: data = " + data);
     }
 
     private void listing6_1() {
@@ -116,7 +118,7 @@ public class MyActivity extends AppCompatActivity {
 
     private void startSubActivity() {
         Intent intent = new Intent(this, MyOtherActivity.class);
-        startActivityForResult(intent, SHOW_SUBACTIVITY);
+        startActivityForResult(intent, SHOW_SUB_ACTIVITY);
     }
 
     private void startSubActivityImplicitly() {

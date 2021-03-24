@@ -20,9 +20,8 @@ package com.professionalandroid.apps.myapplication;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -37,83 +36,87 @@ import java.io.IOException;
  */
 public class SurfaceViewActivity extends Activity implements SurfaceHolder.Callback {
 
-  static final String TAG = "VideoViewActivity";
+    static final String TAG = "VideoViewActivity";
 
-  private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
 
-  public void surfaceCreated(SurfaceHolder holder) {
-    try {
-      // When the surface is created, assign it as the
-      // display surface and assign and prepare a data
-      // source.
-      mediaPlayer.setDisplay(holder);
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        try {
+            // When the surface is created, assign it as the
+            // display surface and assign and prepare a data
+            // source.
+            mediaPlayer.setDisplay(holder);
 
-      // Specify the path, URL, or Content Provider URI of
-      // the video resource to play.
-      File file = new File(Environment.getExternalStorageDirectory(),
-        // TODO Replace this with aan actual video.
-        "sickbeatsvideo.mp4");
-      mediaPlayer.setDataSource(file.getPath());
-      mediaPlayer.prepare();
-    } catch (IllegalArgumentException e) {
-      Log.e(TAG, "Illegal Argument Exception", e);
-    } catch (IllegalStateException e) {
-      Log.e(TAG, "Illegal State Exception", e);
-    } catch (SecurityException e) {
-      Log.e(TAG, "Security Exception", e);
-    } catch (IOException e) {
-      Log.e(TAG, "IO Exception", e);
+            // Specify the path, URL, or Content Provider URI of
+            // the video resource to play.
+            File file = new File(Environment.getExternalStorageDirectory(),
+                    // TODO Replace this with an actual video.
+                    "sickbeatsvideo.mp4");
+            mediaPlayer.setDataSource(file.getPath());
+            mediaPlayer.prepare();
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "Illegal Argument Exception", e);
+        } catch (IllegalStateException e) {
+            Log.e(TAG, "Illegal State Exception", e);
+        } catch (SecurityException e) {
+            Log.e(TAG, "Security Exception", e);
+        } catch (IOException e) {
+            Log.e(TAG, "IO Exception", e);
+        }
     }
-  }
 
-  public void surfaceDestroyed(SurfaceHolder holder) {
-    mediaPlayer.release();
-  }
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        mediaPlayer.release();
+    }
 
-  public void surfaceChanged(SurfaceHolder holder,
-                             int format, int width, int height) { }
+    @Override
+    public void surfaceChanged(SurfaceHolder holder,
+                               int format, int width, int height) {
+    }
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.surfaceviewvideoviewer);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.surfaceviewvideoviewer);
 
-    // Create a new Media Player.
-    mediaPlayer = new MediaPlayer();
+        // Create a new Media Player.
+        mediaPlayer = new MediaPlayer();
 
-    // Get a reference to the Surface View.
-    final SurfaceView surfaceView = findViewById(R.id.surfaceView);
+        // Get a reference to the Surface View.
+        final SurfaceView surfaceView = findViewById(R.id.surfaceView);
 
-    // Configure the Surface View.
-    surfaceView.setKeepScreenOn(true);
+        // Configure the Surface View.
+        surfaceView.setKeepScreenOn(true);
 
-    // Configure the Surface Holder and register the callback.
-    SurfaceHolder holder = surfaceView.getHolder();
-    holder.addCallback(this);
-    holder.setFixedSize(400, 300);
+        // Configure the Surface Holder and register the callback.
+        final SurfaceHolder holder = surfaceView.getHolder();
+        holder.addCallback(this);
+        holder.setFixedSize(400, 300);
 
-    // Connect a play button.
-    Button playButton = findViewById(R.id.buttonPlay);
-    playButton.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        mediaPlayer.start();
-      }
-    });
+        // Connect a play button.
+        final Button playButton = findViewById(R.id.buttonPlay);
+        playButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mediaPlayer.start();
+            }
+        });
 
-    // Connect a pause button.
-    Button pauseButton = findViewById(R.id.buttonPause);
-    pauseButton.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        mediaPlayer.pause();
-      }
-    });
+        // Connect a pause button.
+        final Button pauseButton = findViewById(R.id.buttonPause);
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mediaPlayer.pause();
+            }
+        });
 
-    // Add a skip button.
-    Button skipButton = findViewById(R.id.buttonSkip);
-    skipButton.setOnClickListener(new View.OnClickListener() {
-      public void onClick(View v) {
-        mediaPlayer.seekTo(mediaPlayer.getDuration()/2);
-      }
-    });
-  }
+        // Add a skip button.
+        final Button skipButton = findViewById(R.id.buttonSkip);
+        skipButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mediaPlayer.seekTo(mediaPlayer.getDuration() / 2);
+            }
+        });
+    }
 }

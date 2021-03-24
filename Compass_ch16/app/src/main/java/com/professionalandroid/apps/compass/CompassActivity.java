@@ -23,8 +23,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
@@ -34,110 +34,113 @@ import java.util.TimerTask;
 
 public class CompassActivity extends AppCompatActivity {
 
-  private CompassView mCompassView;
-  private SensorManager mSensorManager;
-  private int mScreenRotation;
-  private float[] mNewestValues;
+    private CompassView mCompassView;
+    private SensorManager mSensorManager;
+    private int mScreenRotation;
+    private float[] mNewestValues;
 
-  private void updateOrientation(float[] values) {
-    if (mCompassView!= null) {
-      mCompassView.setBearing(values[0]);
-      mCompassView.setPitch(values[1]);
-      mCompassView.setRoll(-values[2]);
-      mCompassView.invalidate();
-    }
-  }
-
-  private float[] calculateOrientation(float[] values) {
-    float[] rotationMatrix = new float[9];
-    float[] remappedMatrix = new float[9];
-    float[] orientation = new float[3];
-
-    // Determine the rotation matrix
-    SensorManager.getRotationMatrixFromVector(rotationMatrix, values);
-
-    // Remap the coordinates based on the natural device orientation.
-    int x_axis = SensorManager.AXIS_X;
-    int y_axis = SensorManager.AXIS_Y;
-    switch (mScreenRotation) {
-      case (Surface.ROTATION_90):
-        x_axis = SensorManager.AXIS_Y;
-        y_axis = SensorManager.AXIS_MINUS_X;
-        break;
-      case (Surface.ROTATION_180):
-        y_axis = SensorManager.AXIS_MINUS_Y;
-        break;
-      case (Surface.ROTATION_270):
-        x_axis = SensorManager.AXIS_MINUS_Y;
-        y_axis = SensorManager.AXIS_X;
-        break;
-      default: break;
+    private void updateOrientation(float[] values) {
+        if (mCompassView != null) {
+            mCompassView.setBearing(values[0]);
+            mCompassView.setPitch(values[1]);
+            mCompassView.setRoll(-values[2]);
+            mCompassView.invalidate();
+        }
     }
 
-    SensorManager.remapCoordinateSystem(rotationMatrix,
-      x_axis, y_axis,
-      remappedMatrix);
+    private float[] calculateOrientation(float[] values) {
+        float[] rotationMatrix = new float[9];
+        float[] remappedMatrix = new float[9];
+        float[] orientation = new float[3];
 
-    // Obtain the current, corrected orientation.
-    SensorManager.getOrientation(remappedMatrix, orientation);
+        // Determine the rotation matrix
+        SensorManager.getRotationMatrixFromVector(rotationMatrix, values);
 
-    // Convert from Radians to Degrees.
-    values[0] = (float) Math.toDegrees(orientation[0]);
-    values[1] = (float) Math.toDegrees(orientation[1]);
-    values[2] = (float) Math.toDegrees(orientation[2]);
-    return values;
-  }
+        // Remap the coordinates based on the natural device orientation.
+        int x_axis = SensorManager.AXIS_X;
+        int y_axis = SensorManager.AXIS_Y;
+        switch (mScreenRotation) {
+            case (Surface.ROTATION_90):
+                x_axis = SensorManager.AXIS_Y;
+                y_axis = SensorManager.AXIS_MINUS_X;
+                break;
+            case (Surface.ROTATION_180):
+                y_axis = SensorManager.AXIS_MINUS_Y;
+                break;
+            case (Surface.ROTATION_270):
+                x_axis = SensorManager.AXIS_MINUS_Y;
+                y_axis = SensorManager.AXIS_X;
+                break;
+            default:
+                break;
+        }
 
-  private final SensorEventListener mSensorEventListener
-    = new SensorEventListener() {
-    public void onSensorChanged(SensorEvent sensorEvent) {
-      mNewestValues = calculateOrientation(sensorEvent.values);
+        SensorManager.remapCoordinateSystem(rotationMatrix,
+                x_axis, y_axis,
+                remappedMatrix);
+
+        // Obtain the current, corrected orientation.
+        SensorManager.getOrientation(remappedMatrix, orientation);
+
+        // Convert from Radians to Degrees.
+        values[0] = (float) Math.toDegrees(orientation[0]);
+        values[1] = (float) Math.toDegrees(orientation[1]);
+        values[2] = (float) Math.toDegrees(orientation[2]);
+        return values;
     }
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
-  };
 
-  private void updateGUI() {
-    runOnUiThread(new Runnable() {
-      public void run() {
-        updateOrientation(mNewestValues);
-      }
-    });
-  }
+    private final SensorEventListener mSensorEventListener
+            = new SensorEventListener() {
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            mNewestValues = calculateOrientation(sensorEvent.values);
+        }
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_compass);
-    mCompassView = findViewById(R.id.compassView);
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
 
-    mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-    WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+    private void updateGUI() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                updateOrientation(mNewestValues);
+            }
+        });
+    }
 
-    Display display = wm.getDefaultDisplay();
-    mScreenRotation = display.getRotation();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_compass);
+        mCompassView = findViewById(R.id.compassView);
 
-    mNewestValues = new float[] {0, 0, 0};
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 
-    Timer updateTimer = new Timer("compassUpdate");
-    updateTimer.scheduleAtFixedRate(new TimerTask() {
-      public void run() {
-        updateGUI();
-      }
-    }, 0, 1000/60);
-  }
+        Display display = wm.getDefaultDisplay();
+        mScreenRotation = display.getRotation();
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    Sensor rotationVector = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-    mSensorManager.registerListener(mSensorEventListener,
-      rotationVector,
-      SensorManager.SENSOR_DELAY_FASTEST);
-  }
+        mNewestValues = new float[]{0, 0, 0};
 
-  @Override
-  protected void onPause() {
-    super.onPause();
-    mSensorManager.unregisterListener(mSensorEventListener);
-  }
+        Timer updateTimer = new Timer("compassUpdate");
+        updateTimer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                updateGUI();
+            }
+        }, 0, 1000 / 60);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Sensor rotationVector = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        mSensorManager.registerListener(mSensorEventListener,
+                rotationVector,
+                SensorManager.SENSOR_DELAY_FASTEST);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(mSensorEventListener);
+    }
 }

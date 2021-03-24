@@ -52,8 +52,9 @@ public class MyViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<String>> getData() {
-        if (data == null)
+        if (data == null) {
             data = new MutableLiveData<List<String>>();
+        }
         loadData();
         return data;
     }

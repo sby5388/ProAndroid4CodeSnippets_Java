@@ -26,6 +26,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.WorkerThread;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -69,7 +70,10 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    // This method MUST be run on a background thread.
+    /**
+     * This method MUST be run on a background thread.
+     */
+    @WorkerThread
     private void listing7_1() {
         // TODO Replace with Google Places API call
         String myFeed = "";
@@ -164,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 "http://developer.android.com/shareables/icon_templates-v4.0.zip");
 
         DownloadManager.Request request = new DownloadManager.Request(uri);
+        //save this key
         long reference = downloadManager.enqueue(request);
     }
 
@@ -171,9 +176,7 @@ public class MainActivity extends AppCompatActivity {
         // Listing 7-10: Finding details of paused downloads
 
         // Obtain the Download Manager Service.
-        String serviceString = Context.DOWNLOAD_SERVICE;
-        DownloadManager downloadManager;
-        downloadManager = (DownloadManager) getSystemService(serviceString);
+        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
 
         // Create a query for paused downloads.
         DownloadManager.Query pausedDownloadQuery = new DownloadManager.Query();

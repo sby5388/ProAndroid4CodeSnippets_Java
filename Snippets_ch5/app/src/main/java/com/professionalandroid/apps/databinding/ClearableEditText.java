@@ -52,6 +52,7 @@ public class ClearableEditText extends LinearLayout {
         // Inflate the view from the layout resource.
         LayoutInflater li = LayoutInflater.from(getContext());
         // TODO: 2020/4/24 最后一个参数是 true
+        //
         final View view = li.inflate(R.layout.clearable_edit_text, this, true);
         Log.d(TAG, "ClearableEditText: view == null ？" + (view == null));
 

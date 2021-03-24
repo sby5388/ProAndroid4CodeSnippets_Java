@@ -23,19 +23,20 @@ import android.content.Context;
 
 public class EarthquakeDatabaseAccessor {
 
-  private static EarthquakeDatabase EarthquakeDatabaseInstance;
-  private static final String EARTHQUAKE_DB_NAME = "earthquake_db";
+    private static final String EARTHQUAKE_DB_NAME = "earthquake_db";
+    private static EarthquakeDatabase EarthquakeDatabaseInstance;
 
-  private EarthquakeDatabaseAccessor() {}
-
-  public static EarthquakeDatabase getInstance(Context context) {
-    if (EarthquakeDatabaseInstance == null) {
-      // Create or open a new SQLite database, and return it as
-      // a Room Database instance.
-      EarthquakeDatabaseInstance = Room.databaseBuilder(context,
-        EarthquakeDatabase.class, EARTHQUAKE_DB_NAME).build();
+    private EarthquakeDatabaseAccessor() {
     }
 
-    return EarthquakeDatabaseInstance;
-  }
+    public static EarthquakeDatabase getInstance(Context context) {
+        if (EarthquakeDatabaseInstance == null) {
+            // Create or open a new SQLite database, and return it as
+            // a Room Database instance.
+            EarthquakeDatabaseInstance = Room.databaseBuilder(context,
+                    EarthquakeDatabase.class, EARTHQUAKE_DB_NAME).build();
+        }
+
+        return EarthquakeDatabaseInstance;
+    }
 }

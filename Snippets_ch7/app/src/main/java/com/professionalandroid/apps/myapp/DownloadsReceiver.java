@@ -35,7 +35,9 @@ public class DownloadsReceiver extends BroadcastReceiver {
                 myDownloadQuery.setFilterById(reference);
 
                 Cursor myDownload = downloadManager.query(myDownloadQuery);
-
+                if (myDownload == null) {
+                    return;
+                }
                 if (myDownload.moveToFirst()) {
                     int fileIdIdx =
                             myDownload.getColumnIndex(DownloadManager.COLUMN_ID);

@@ -18,84 +18,79 @@
 
 package com.professionalandroid.apps.myapplication;
 
-import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.media.AudioManager;
+import android.os.Bundle;
 import android.os.RemoteException;
-import android.provider.Browser;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
-  private static final String TAG = "MEDIABROWSER";
-  /*
-   * Listing 17-8: Connecting to your Media Browser Service from your Activity
-   * Listing 17-9: Keeping your UI in sync with playback state and metadata changes
-   */
-  private MediaBrowserCompat mMediaBrowser;
-  private MediaControllerCompat mMediaController;
+    private static final String TAG = "MEDIABROWSER";
+    /*
+     * Listing 17-8: Connecting to your Media Browser Service from your Activity
+     * Listing 17-9: Keeping your UI in sync with playback state and metadata changes
+     */
+    private MediaBrowserCompat mMediaBrowser;
+    private MediaControllerCompat mMediaController;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.main_activity);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_activity);
 
-    // Create the MediaBrowserCompat
-    mMediaBrowser = new MediaBrowserCompat(
-      this,
-      new ComponentName(this, MediaPlaybackService.class),
-      new MediaBrowserCompat.ConnectionCallback() {
-        @Override
-        public void onConnected() {
-          try {
-            // We can construct a media controller from the session's token
-            MediaSessionCompat.Token token = mMediaBrowser.getSessionToken();
-            mMediaController = new MediaControllerCompat(MainActivity.this, token);
+        // Create the MediaBrowserCompat
+        mMediaBrowser = new MediaBrowserCompat(
+                this,
+                new ComponentName(this, MediaPlaybackService.class),
+                new MediaBrowserCompat.ConnectionCallback() {
+                    @Override
+                    public void onConnected() {
+                        try {
+                            // We can construct a media controller from the session's token
+                            MediaSessionCompat.Token token = mMediaBrowser.getSessionToken();
+                            mMediaController = new MediaControllerCompat(MainActivity.this, token);
 
-            // Listing 17-9: Keeping your UI in sync with playback state and metadata changes
-            mMediaController.registerCallback(new MediaControllerCompat.Callback() {
-              @Override
-              public void onPlaybackStateChanged(PlaybackStateCompat state) {
-                // Update the UI based on playback state change.
-              }
+                            // Listing 17-9: Keeping your UI in sync with playback state and metadata changes
+                            mMediaController.registerCallback(new MediaControllerCompat.Callback() {
+                                @Override
+                                public void onPlaybackStateChanged(PlaybackStateCompat state) {
+                                    // Update the UI based on playback state change.
+                                }
 
-              @Override
-              public void onMetadataChanged(MediaMetadataCompat metadata) {
-                // Update the UI based on Media Metadata change.
-              }
-            });
-          } catch (RemoteException e) {
-            Log.e(TAG, "Error creating controller", e);
-          }
-        }
+                                @Override
+                                public void onMetadataChanged(MediaMetadataCompat metadata) {
+                                    // Update the UI based on Media Metadata change.
+                                }
+                            });
+                        } catch (RemoteException e) {
+                            Log.e(TAG, "Error creating controller", e);
+                        }
+                    }
 
-        @Override
-        public void onConnectionSuspended() {
-          // We were connected, but no longer are.
-        }
+                    @Override
+                    public void onConnectionSuspended() {
+                        // We were connected, but no longer are.
+                    }
 
-        @Override
-        public void onConnectionFailed() {
-          // The attempt to connect failed completely.
-          // Check the ComponentName!
-        }
-      },
-      null);
-    mMediaBrowser.connect();
-  }
+                    @Override
+                    public void onConnectionFailed() {
+                        // The attempt to connect failed completely.
+                        // Check the ComponentName!
+                    }
+                },
+                null);
+        mMediaBrowser.connect();
+    }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    mMediaBrowser.disconnect();
-  }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mMediaBrowser.disconnect();
+    }
 }

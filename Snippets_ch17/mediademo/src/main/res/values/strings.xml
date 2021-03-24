@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MediaDemo</string>
+    <string name="camera">相机的使用</string>
+    <string name="take_pic">\"拍照\"</string>
+    <string name="video_player">视频播放器</string>
+    <string name="play">播放</string>
+    <string name="skip">跳过</string>
+    <string name="pause">暂停</string>
+</resources>
